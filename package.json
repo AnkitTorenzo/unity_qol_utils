@@ -1,0 +1,18 @@
+{
+    "name": "git.ankit.qol_utilities",
+    "version": "0.0.1",
+    "displayName": "Quality of Life Utilities",
+    "description": "In this package, I've added and will keep adding anything that I find useful and frequently in use small code snippets or maybe some small scripts that's I've created over the time.",
+    "unity": "2019.1",
+    "unityRelease": "0b5",
+    "documentationUrl": "https://github.com/AnkitTorenzo/unity_qol_utils/blob/master/README.md",
+    "changelogUrl": "https://github.com/AnkitTorenzo/unity_qol_utils",
+    "licensesUrl": "https://github.com/AnkitTorenzo/unity_qol_utils/blob/master/LICENSE",
+    "dependencies": {},
+    "keywords": [],
+    "author": {
+        "name": "Ankit Bhalodiya",
+        "email": "ankitbhalodiya@hotmail.com",
+        "url": "https://github.com/AnkitTorenzo"
+    }
+}
