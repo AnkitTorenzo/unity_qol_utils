@@ -2,7 +2,7 @@
 
 namespace QOL
 {
-    public class ActionEvents
+    public class ActionEvent
     {
         private Action _event = delegate { };
 
@@ -27,20 +27,20 @@ namespace QOL
             _event?.Invoke();
         }
 
-        public static ActionEvents operator +(ActionEvents a, Action b)
+        public static ActionEvent operator +(ActionEvent a, Action b)
         {
             a.AddListener(b);
             return a;
         }
 
-        public static ActionEvents operator -(ActionEvents a, Action b)
+        public static ActionEvent operator -(ActionEvent a, Action b)
         {
             a.RemoveListener(b);
             return a;
         }
     }
 
-    public class ActionEvents<T>
+    public class ActionEvent<T>
     {
         private Action<T> _event = delegate { };
 
@@ -65,13 +65,13 @@ namespace QOL
             _event?.Invoke(value);
         }
 
-        public static ActionEvents<T> operator +(ActionEvents<T> a, Action<T> b)
+        public static ActionEvent<T> operator +(ActionEvent<T> a, Action<T> b)
         {
             a.AddListener(b);
             return a;
         }
 
-        public static ActionEvents<T> operator -(ActionEvents<T> a, Action<T> b)
+        public static ActionEvent<T> operator -(ActionEvent<T> a, Action<T> b)
         {
             a.RemoveListener(b);
             return a;

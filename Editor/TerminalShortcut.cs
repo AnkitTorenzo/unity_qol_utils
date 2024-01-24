@@ -39,7 +39,7 @@ namespace QOL.Editor
         {
             var path = Application.dataPath;
             var sagments = path.Split('/')[..^1];
-            path = string.Join('/', sagments);
+            path = string.Join('\\', sagments);
             return path;
         }
     }
