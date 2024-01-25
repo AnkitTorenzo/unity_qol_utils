@@ -1,8 +1,6 @@
 using System.Diagnostics;
-using System.Reflection;
 using UnityEditor;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 namespace QOL.Editor
 {
@@ -22,7 +20,7 @@ namespace QOL.Editor
             Process.Start(startInfo);
         }
 
-        [MenuItem("QOL/Open Explorer at root ^#&f")]
+        [MenuItem("QOL/Open Explorer at root ^e")]
         public static void OpenTerminalAtDirectory()
         {
             string path = GetProjectPath();
