@@ -29,3 +29,13 @@ You can find this at _QOL/Open Explorer at root_ or for shortcut use ```Ctrl + S
 
 ## Runtime
 ### ActionEvent
+
+The hole reason I created this is because I like to keep all of my variables get only and doing that I was not able
+to use the ```+=``` operator of the Action/delegate and I had to write two method one for adding and removing
+listeners. So I create a class with those methods already written it.
+
+To use this just creat an object of ```ActiveEvent``` you also have a generic ```ActionEvent<T>``` if you want to
+create an event with a parameter just as similar to ```Action<T>```.
+
+I've overloaded ```+``` and ```-``` operator so that we can use ```+=``` and ```-=``` to add/remove the listeners.
+With that you can also use ```AddListener()``` and ```RemoveListener()``` for adding or removing listeners.
