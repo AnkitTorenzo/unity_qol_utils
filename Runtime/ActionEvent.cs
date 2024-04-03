@@ -2,10 +2,9 @@
 
 namespace QOL
 {
-    public class ActionEvent
+    public struct ActionEvent
     {
-        private Action _event = delegate { };
-
+        private Action _event;
         public void AddListener(Action listener)
         {
             RemoveListener(listener);
@@ -22,7 +21,7 @@ namespace QOL
             _event = null;
         }
 
-        public void Invoke()
+        public readonly void Invoke()
         {
             _event?.Invoke();
         }
@@ -40,10 +39,9 @@ namespace QOL
         }
     }
 
-    public class ActionEvent<T>
+    public struct ActionEvent<T>
     {
-        private Action<T> _event = delegate { };
-
+        private Action<T> _event;
         public void AddListener(Action<T> listener)
         {
             RemoveListener(listener);
@@ -60,7 +58,7 @@ namespace QOL
             _event = null;
         }
 
-        public void Invoke(T value)
+        public readonly void Invoke(T value)
         {
             _event?.Invoke(value);
         }
