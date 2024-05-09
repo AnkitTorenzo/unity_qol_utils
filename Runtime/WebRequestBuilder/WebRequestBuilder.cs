@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Codice.ThemeImages;
 using UnityEngine;
 using UnityEngine.Networking;
 
 public class WRB
 {
     #region Static Stuff
+
+    private const string ABORT_BUILD_MSG = "ABORTING build chain.";
     private static WRBConfig _config;
 
     public static void Init(WRBConfig config)
@@ -45,7 +46,8 @@ public class WRB
     #endregion
 
     private string _url;
-    private string _methodName;
+    private PayloadType _payloadType;
+    private RequestMethod _methodName;
 
     //Different types of payload
     private Dictionary<string, string> dictPayload;
@@ -61,38 +63,51 @@ public class WRB
 
     public WRB SetMethodType(RequestMethod method)
     {
-        _methodName = method.ToString();
+        _methodName = method;
         return this;
     }
 
     public WRB SetDictPayload(Dictionary<string, string> payload)
     {
+        if (!IsPayloadExists())
+            return null;
+
+        _payloadType = PayloadType.DICT;
         dictPayload = payload;
         return this;
     }
 
+
     public WRB SetWFormPayload(WWWForm payload)
     {
-        if (_methodName == RequestMethod.NONE.ToString() || _methodName == RequestMethod.GET.ToString())
+        if (!IsPayloadExists())
+            return null;
+
+        if (_methodName == RequestMethod.GET)
         {
             Debug.LogError($"WWWForm is not supported with 'RequestMethod.GET'. Please use the same method with Dictionary<string, string> as parameter, or change the RequestMethod from 'GET' to something-else");
-            Debug.LogError($"Aborting the request building chain.");
+            Debug.LogError(ABORT_BUILD_MSG);
             return null;
         }
 
+        _payloadType = PayloadType.W_FORM;
         formPayload = payload;
         return this;
     }
 
     public WRB SetStrPayload(string strPayload)
     {
-        if (_methodName == RequestMethod.NONE.ToString() || _methodName == RequestMethod.GET.ToString())
+        if (!IsPayloadExists())
+            return null;
+
+        if (_methodName == RequestMethod.GET)
         {
             Debug.LogError($"strPayload is not supported with 'RequestMethod.GET'. Please use the same method with Dictionary<string, string> as parameter, or change the RequestMethod from 'GET' to something-else");
-            Debug.LogError($"Aborting the request building chain.");
+            Debug.LogError(ABORT_BUILD_MSG);
             return null;
         }
 
+        _payloadType = PayloadType.STR;
         _strPayload = strPayload;
         return this;
     }
@@ -109,6 +124,18 @@ public class WRB
         return this;
     }
 
+    private bool IsPayloadExists()
+    {
+        if (_payloadType != PayloadType.NONE)
+        {
+            Debug.LogError($"It looks like you already have added the payload in the chain.\nPlease restart the build chain.");
+            Debug.LogError(ABORT_BUILD_MSG);
+            return false;
+        }
+
+        return true;
+    }
+
     public WRB Build()
     {
         if (_isBuilt)
@@ -117,28 +144,46 @@ public class WRB
             return this;
         }
 
-        if (_methodName == RequestMethod.NONE.ToString())
+        _request = _methodName switch
         {
-            Debug.LogError($"Hay you haven't set the type of method for your request. Please user SetMethodType() method to add/set method of your request.");
-            Debug.LogError($"Aborting the building process.");
-            return null;
-        }
-
-
-        _request = new()
-        {
-            url = _url,
-            method = _methodName.ToString(),
+            RequestMethod.GET => GenerateGetRequest(),
+            RequestMethod.POST => GeneratePostRequest(),
+            RequestMethod.PUT => GeneratePutRequest(),
+            RequestMethod.DELETE => GenerateDeleteRequest(),
         };
         return this;
+    }
+
+    private UnityWebRequest GenerateDeleteRequest()
+    {
+        return null;
+    }
+
+    private UnityWebRequest GeneratePutRequest()
+    {
+        return null;
+    }
+
+    private UnityWebRequest GeneratePostRequest()
+    {
+        return null;
+    }
+
+    private UnityWebRequest GenerateGetRequest()
+    {
+        if (_payloadType != PayloadType.DICT)
+        {
+            Debug.LogError($"GetRequest only support Dictionary as it's payload.");
+            Debug.LogError(ABORT_BUILD_MSG);
+        }
+        return null;
     }
 
     public void Send()
     {
         if (_request == null)
         {
-            Debug.LogError($"It seams that you forget to build the request before sending it. Call Build() method right before calling Send() method in the builder chain.");
-            return;
+            Debug.LogError($"It seams that you forget to build the request before sending it. Call Build() method right before calling Send() method in the builder chain."); return;
         }
     }
 }
@@ -155,9 +200,16 @@ public class WRBConfig
 
 public enum RequestMethod
 {
-    NONE,
     GET,
     POST,
     PUT,
     DELETE,
+}
+
+public enum PayloadType
+{
+    NONE,
+    STR,
+    DICT,
+    W_FORM
 }
